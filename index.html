@@ -39,119 +39,74 @@
       radial-gradient(circle at 50% 80%, rgba(210,180,140,0.1) 0%, transparent 50%);
   }
   .container {
-    position: relative;
-    z-index: 1;
-    max-width: 720px;
-    width: 100%;
+    position: relative; z-index: 1;
+    max-width: 720px; width: 100%;
     background: rgba(255,251,245,0.9);
     backdrop-filter: blur(12px);
-    border-radius: 30px;
-    padding: 40px 30px;
+    border-radius: 30px; padding: 40px 30px;
     box-shadow: 0 20px 40px rgba(100,80,60,0.08);
     border: 1px solid #E5D9CC;
   }
   h1, h2 {
     font-family: 'Nunito', 'Segoe UI', sans-serif;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 25px;
+    font-weight: 600; text-align: center; margin-bottom: 25px;
     color: var(--dark-green);
   }
   .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
-    margin: 25px 0;
+    gap: 15px; margin: 25px 0;
   }
   .card {
     background: var(--light-green);
-    border: 1px solid #C0D4C0;
-    border-radius: 15px;
-    padding: 20px 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 1rem;
-    text-align: center;
+    border: 1px solid #C0D4C0; border-radius: 15px;
+    padding: 20px 15px; cursor: pointer;
+    transition: all 0.2s; font-size: 1rem; text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.03);
   }
   .card:hover {
-    background: #C8DCC8;
-    transform: translateY(-3px);
+    background: #C8DCC8; transform: translateY(-3px);
     box-shadow: 0 8px 15px rgba(44,74,46,0.1);
   }
-  .card.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(20%);
-  }
+  .card.disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(20%); }
   .btn {
-    background: var(--dark-green);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 30px;
-    font-size: 1rem;
-    cursor: pointer;
-    margin: 10px 5px;
-    transition: all 0.2s;
-    font-family: inherit;
+    background: var(--dark-green); color: white;
+    border: none; padding: 12px 30px; border-radius: 30px;
+    font-size: 1rem; cursor: pointer; margin: 10px 5px;
+    transition: all 0.2s; font-family: inherit;
     box-shadow: 0 4px 6px rgba(44,74,46,0.2);
   }
   .btn:hover { background: #1E3B20; transform: translateY(-1px); }
   .progress-bar {
-    height: 10px;
-    background: #E5D9CC;
-    border-radius: 5px;
-    margin: 20px 0;
-    overflow: hidden;
+    height: 10px; background: #E5D9CC; border-radius: 5px;
+    margin: 20px 0; overflow: hidden;
   }
   .progress-fill {
     height: 100%;
     background: linear-gradient(to right, var(--brown), var(--gold));
-    width: 0%;
-    transition: width 0.4s;
-    border-radius: 5px;
+    width: 0%; transition: width 0.4s; border-radius: 5px;
   }
   .question-area {
-    font-size: 1.2rem;
-    margin: 30px 0 20px;
-    text-align: center;
-    font-weight: 500;
-    color: var(--dark-green);
+    font-size: 1.2rem; margin: 30px 0 20px;
+    text-align: center; font-weight: 500; color: var(--dark-green);
   }
   .options { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
   .option-btn {
-    background: white;
-    border: 1px solid #D4C8B5;
-    border-radius: 15px;
-    padding: 16px 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: left;
-    font-size: 1rem;
-    font-family: inherit;
-    color: var(--dark-green);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    background: white; border: 1px solid #D4C8B5; border-radius: 15px;
+    padding: 16px 20px; cursor: pointer; transition: all 0.2s;
+    text-align: left; font-size: 1rem; font-family: inherit;
+    color: var(--dark-green); box-shadow: 0 2px 4px rgba(0,0,0,0.02);
   }
   .option-btn:hover {
-    background: #F0ECDF;
-    border-color: var(--brown);
-    transform: translateX(3px);
+    background: #F0ECDF; border-color: var(--brown); transform: translateX(3px);
   }
   .result-text {
-    background: #FDF9F2;
-    border-radius: 20px;
-    padding: 25px;
-    margin: 20px 0;
-    white-space: pre-wrap;
-    line-height: 1.8;
-    border: 1px solid #E0D3C0;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+    background: #FDF9F2; border-radius: 20px; padding: 25px;
+    margin: 20px 0; white-space: pre-wrap; line-height: 1.8;
+    border: 1px solid #E0D3C0; box-shadow: 0 4px 8px rgba(0,0,0,0.02);
   }
   .hidden { display: none; }
   .footer { margin-top: 40px; text-align: center; font-size: 0.85rem; color: #A09080; z-index: 1; }
-
-  /* Декоративные элементы */
   .butterfly-new, .flower, .leaf, .heart {
     position: absolute; pointer-events: none; z-index: 0; opacity: 0.5;
   }
@@ -247,7 +202,7 @@ const topics = [
   { id: 'selfesteem', name: 'У меня низкая самооценка', active: false }
 ];
 
-// Дерево вопросов (конечные узлы теперь BLOCK_..., не R_...)
+// Дерево вопросов (увеличена глубина до BLOCK_)
 const questions = {
   S1: { text:"Бывает ли, что в моменты сильной тревоги мир вокруг словно отдаляется, становится нереальным, или ты слышишь то, чего не слышат другие?",
     options:[
@@ -280,7 +235,7 @@ const questions = {
       {text:"Чувство, что я подвожу других или себя", next:"C1"},
       {text:"Физический дискомфорт: сердце колотится, трудно дышать", next:"D1"}
   ]},
-  // Ветка А
+  // Ветка А – Контроль
   A1: { text:"Когда чувствуешь, что контроль ускользает, что делаешь в первую секунду?",
     options:[
       {text:"Пытаюсь составить план, список, структурировать", next:"A2"},
@@ -436,7 +391,7 @@ const questions = {
       {text:"Не понимают меня", next:"BLOCK_A12_2"},
       {text:"Осуждают", next:"BLOCK_A12_3"}
   ]},
-  // Ветка Б
+  // Ветка Б – Неизвестность
   B1: { text:"Когда сталкиваешься с неопределённостью, что делаешь?",
     options:[
       {text:"Прокручиваю плохие сценарии", next:"B2"},
@@ -445,15 +400,45 @@ const questions = {
   ]},
   B2: { text:"Прокручивание сценариев помогает?",
     options:[
-      {text:"Да, даёт иллюзию контроля", next:"BLOCK_B2_1"},
-      {text:"Нет, только истощает", next:"BLOCK_B2_2"},
-      {text:"Иногда помогает, но чаще застреваю", next:"BLOCK_B2_3"}
+      {text:"Да, даёт иллюзию контроля", next:"B2_1"},
+      {text:"Нет, только истощает", next:"B2_2"},
+      {text:"Иногда помогает, но чаще застреваю", next:"B2_3"}
+  ]},
+  B2_1: { text:"Как долго длится эта иллюзия?",
+    options:[
+      {text:"Пока не приходит новая мысль", next:"BLOCK_B2_1"},
+      {text:"Минут 10-15", next:"BLOCK_B2_1"}
+  ]},
+  B2_2: { text:"Что именно истощает сильнее?",
+    options:[
+      {text:"Невозможность остановиться", next:"BLOCK_B2_2"},
+      {text:"Физическая усталость от мыслей", next:"BLOCK_B2_2"}
+  ]},
+  B2_3: { text:"Что это за застревание?",
+    options:[
+      {text:"Как болото, затягивает", next:"BLOCK_B2_3"},
+      {text:"Как лабиринт, хожу по кругу", next:"BLOCK_B2_3"}
   ]},
   B3: { text:"Когда ищешь информацию, что происходит?",
     options:[
-      {text:"Успокаиваюсь, если нахожу ответ", next:"BLOCK_B3_1"},
-      {text:"Тревога усиливается", next:"BLOCK_B3_2"},
-      {text:"Не могу остановиться, даже когда понимаю, что бесполезно", next:"BLOCK_B3_3"}
+      {text:"Успокаиваюсь, если нахожу ответ", next:"B3_1"},
+      {text:"Тревога усиливается", next:"B3_2"},
+      {text:"Не могу остановиться, даже когда понимаю, что бесполезно", next:"B3_3"}
+  ]},
+  B3_1: { text:"Успокоение длится…",
+    options:[
+      {text:"Минуты, потом нужен новый вопрос", next:"BLOCK_B3_1"},
+      {text:"Пока не появляется новый повод", next:"BLOCK_B3_1"}
+  ]},
+  B3_2: { text:"Почему продолжаешь искать?",
+    options:[
+      {text:"Надеюсь, что найду что-то другое", next:"BLOCK_B3_2"},
+      {text:"Это уже привычка", next:"BLOCK_B3_2"}
+  ]},
+  B3_3: { text:"Как часто это происходит?",
+    options:[
+      {text:"Почти ежедневно", next:"BLOCK_B3_3"},
+      {text:"Только в сильных стрессах", next:"BLOCK_B3_3"}
   ]},
   B4: { text:"Ожидание похоже на...",
     options:[
@@ -461,7 +446,7 @@ const questions = {
       {text:"Пустоту", next:"BLOCK_B4_2"},
       {text:"Надежду, что всё разрешится", next:"BLOCK_B4_3"}
   ]},
-  // Ветка В
+  // Ветка В – Вина
   C1: { text:"Чьё разочарование страшнее всего?",
     options:[
       {text:"Своё собственное", next:"C2"},
@@ -481,7 +466,7 @@ const questions = {
       {text:"Они будут страдать, и это моя вина", next:"BLOCK_C3_2"},
       {text:"Я потеряю их уважение", next:"BLOCK_C3_3"}
   ]},
-  // Ветка Г
+  // Ветка Г – Тело
   D1: { text:"Что ощущаешь в первую очередь?",
     options:[
       {text:"Сердце: колотится, давит", next:"D2"},
@@ -503,7 +488,7 @@ const questions = {
   ]}
 };
 
-// Тексты блоков для каждого конечного узла
+// Тексты блоков для конечных узлов
 const blockTexts = {
   BLOCK_A3_1_1: { title:"Гонка без финиша", portrait:"Ты привык(ла) бежать, потому что остановка кажется опасной. Твоя тревога — это вечный двигатель, который не даёт передышки.", state:"Ты находишься в цикле «план — временное облегчение — новая волна тревоги». Это похоже на бесконечную гонку за собственным хвостом.", recommendation:"Попробуй сегодня сознательно замедлиться хотя бы на 10 минут. Скажи себе: «Я имею право на паузу». Ничего страшного не случится, обещаю." },
   BLOCK_A3_1_2: { title:"Ожидание удара", portrait:"Ты живёшь в режиме постоянной боевой готовности. Даже когда всё хорошо, ты ждёшь подвоха.", state:"Твоя нервная система истощена ожиданием неприятностей. Ты редко позволяешь себе расслабиться, потому что расслабление кажется небезопасным.", recommendation:"Позволь себе представить, что прямо сейчас ты в безопасности. Осмотрись вокруг: ничего не угрожает. Повторяй это как мантру." },
@@ -581,7 +566,7 @@ const blockTexts = {
   STOP: "Пожалуйста, обратись за профессиональной помощью. Твои переживания очень серьёзны и заслуживают бережного сопровождения.\n📞 Бесплатная горячая линия (Россия): 8-800-2000-122"
 };
 
-// Общие глубокие вопросы (G1-G12)
+// Общие глубокие вопросы (12 штук)
 const generalQuestions = [
   { id:'G1', text:"Как ты думаешь, когда впервые появилась эта тревога?", choices:["В детстве","В подростковом возрасте","Во взрослой жизни","Не могу вспомнить"] },
   { id:'G2', text:"Были ли в твоём детстве моменты, когда ты чувствовал(а) себя в полной безопасности?", choices:["Да, часто","Иногда","Очень редко","Никогда"] },
@@ -601,11 +586,10 @@ const generalQuestions = [
 let history = [];
 let currentQ = 'S1';
 let step = 0;
-const totalSteps = 35; // ~4 фильтра + 4-6 ветки + 12 общих = около 22-26, но за счёт развилок доходит до 30+
-let collectedBlockId = null; // ID блока из конечного узла ветки
-let generalAnswers = []; // ответы на общие вопросы
+let totalSteps = 35; // прогресс-бар
+let collectedBlockId = null;
+let generalAnswers = [];
 let generalIdx = 0;
-let isGeneralPhase = false;
 
 function renderTopics() {
   const grid = document.getElementById('topics-grid');
@@ -623,7 +607,7 @@ function startTest() {
   document.getElementById('start-screen').classList.add('hidden');
   document.getElementById('test-screen').classList.remove('hidden');
   step = 0; history = []; collectedBlockId = null;
-  generalAnswers = []; generalIdx = 0; isGeneralPhase = false;
+  generalAnswers = []; generalIdx = 0;
   updateProgress();
   showQuestion('S1');
 }
@@ -639,9 +623,7 @@ function showQuestion(id) {
     showFinal(); return;
   }
   if (id.startsWith('BLOCK_')) {
-    // сохраняем блок и переходим к общим вопросам
     collectedBlockId = id;
-    isGeneralPhase = true;
     generalIdx = 0;
     askGeneralQuestion();
     return;
@@ -706,7 +688,6 @@ function showFinal() {
   if (generalAnswers.length > 0) {
     text += '\n\n💬 Твои ответы на важные вопросы:';
     generalAnswers.forEach(a => text += `\n• ${a.question}: ${a.answer}`);
-    // Добавим персонализированные фразы на основе ответов (упрощённо)
     const lastMsg = generalAnswers[generalAnswers.length-1].answer;
     text += `\n\n✨ Сегодня ты сказал(а) себе: «${lastMsg}». Запомни это.`;
   }
