@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Психологическая поддержка</title>
+<style>
+  :root {
+    --beige: #F7F3EB;
+    --light-green: #D4E8D4;
+    --dark-green: #2C4A2E;
+    --brown: #8B7355;
+    --text-color: #2C4A2E;
+    --card-bg: #D4E8D4;
+    --card-hover: #C0DCC0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background-color: var(--beige);
+    font-family: 'Segoe UI', 'Inter', sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .decor {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 0;
+  }
+  .wave {
+    width: 100%;
+    height: 40px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath d='M0 20 C200 0, 400 40, 600 20 C800 0, 1000 40, 1200 20 L1200 40 L0 40 Z' fill='%238B7355' opacity='0.3'/%3E%3C/svg%3E") repeat-x;
+    background-size: contain;
+  }
+  .butterfly {
+    width: 40px;
+    height: 30px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 30'%3E%3Cpath d='M20 5 C15 -5, 0 10, 5 20 C10 30, 20 25, 20 15 C20 25, 30 30, 35 20 C40 10, 25 -5, 20 5Z' fill='none' stroke='%238B7355' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat;
+  }
+  .heart {
+    width: 30px;
+    height: 30px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 28 C8 18, 0 12, 0 8 C0 2, 6 -2, 10 2 L16 10 L22 2 C26 -2, 32 2, 32 8 C32 12, 24 18, 16 28Z' fill='none' stroke='%238B7355' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat;
+  }
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    width: 100%;
+    background: rgba(255, 251, 245, 0.85);
+    backdrop-filter: blur(6px);
+    border-radius: 30px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid #E5D9CC;
+  }
+  h1, h2 {
+    font-family: 'Nunito', 'Segoe UI', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin: 25px 0;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid #C0D4C0;
+    border-radius: 15px;
+    padding: 18px 15px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+  .card:hover {
+    background: var(--card-hover);
+    transform: translateY(-2px);
+  }
+  .card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(20%);
+  }
+  .btn {
+    display: inline-block;
+    background: var(--dark-green);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 10px 5px;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  .btn:hover { background: #1E3B20; }
+  .progress-bar {
+    height: 8px;
+    background: #E5D9CC;
+    border-radius: 4px;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--brown);
+    width: 0%;
+    transition: width 0.3s;
+    border-radius: 4px;
+  }
+  .question-area {
+    font-size: 1.2rem;
+    margin: 30px 0 20px;
+    text-align: center;
+    font-weight: 500;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .option-btn {
+    background: white;
+    border: 1px solid #D4C8B5;
+    border-radius: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-size: 1rem;
+    font-family: inherit;
+    color: var(--text-color);
+  }
+  .option-btn:hover {
+    background: #F0ECDF;
+    border-color: var(--brown);
+  }
+  .result-text {
+    background: #FBF7EF;
+    border-radius: 20px;
+    padding: 25px;
+    margin: 20px 0;
+    white-space: pre-wrap;
+    line-height: 1.8;
+    border: 1px dashed #C0B090;
+  }
+  .hidden { display: none; }
+  .footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #A09080;
+    z-index: 1;
+  }
+  @media (max-width: 500px) {
+    .container { padding: 20px 15px; }
+    .question-area { font-size: 1.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="decor wave" style="top: 10px; left: 0;"></div>
+<div class="decor butterfly" style="top: 80px; right: 20px; transform: scale(1.5);"></div>
+<div class="decor heart" style="bottom: 120px; left: 30px; transform: scale(1.2);"></div>
+<div class="decor heart" style="top: 200px; left: 60px; transform: scale(0.8);"></div>
+<div class="decor butterfly" style="bottom: 60px; right: 70px; transform: scale(1) rotate(10deg);"></div>
+
+<div class="container" id="app">
+  <div id="start-screen">
+    <h1>🌿 Пространство поддержки</h1>
+    <p style="text-align:center; margin-bottom:10px;">Выбери, что тебе ближе:</p>
+    <div id="topics-grid" class="cards"></div>
+    <p style="font-size:0.85rem; text-align:center; margin-top:20px; color:#666;">
+      Этот сервис — инструмент самопознания и не заменяет профессиональную помощь. Если ты подозреваешь у себя серьёзное расстройство, обратись к специалисту.
+    </p>
+  </div>
+
+  <div id="test-screen" class="hidden">
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+    <div id="question-text" class="question-area"></div>
+    <div id="options-container" class="options"></div>
+  </div>
+
+  <div id="result-screen" class="hidden">
+    <h2>✨ Письмо для тебя</h2>
+    <div id="result-content" class="result-text"></div>
+    <button class="btn" onclick="location.reload()">Пройти ещё раз</button>
+    <button class="btn" onclick="window.print()">Скачать / Распечатать</button>
+  </div>
+</div>
+
+<div class="footer">Сделано с заботой</div>
+
+<script>
+// Темы (для демонстрации активна только "Тревога")
+const topics = [
+  { id: 'anxiety', name: 'Я постоянно тревожусь и не могу расслабиться', active: true },
+  { id: 'apathy', name: 'Чувствую апатию, ничего не радует', active: false },
+  { id: 'selfesteem', name: 'У меня низкая самооценка', active: false },
+  // Остальные 17 можно добавить по аналогии
+];
+
+// Дерево вопросов
+const questions = {
+  S1: {
+    text: "Бывает ли, что в моменты сильной тревоги мир вокруг словно отдаляется, становится нереальным, или ты слышишь то, чего не слышат другие?",
+    options: [
+      { text: "Да, такое бывает, и это меня пугает", next: "STOP_SAFETY" },
+      { text: "Иногда странное ощущение, но я понимаю, что это от усталости", next: "S2" },
+      { text: "Нет, ничего подобного", next: "S2" }
+    ]
+  },
+  S2: {
+    text: "Посещают ли тебя мысли о том, что жить дальше невыносимо, или желание исчезнуть, уснуть и не проснуться?",
+    options: [
+      { text: "Да, такие мысли есть", next: "STOP_SAFETY" },
+      { text: "Иногда проскальзывает, но я сразу отгоняю", next: "S3" },
+      { text: "Нет, я хочу справиться с тревогой, а не уйти из жизни", next: "S3" }
+    ]
+  },
+  S3: {
+    text: "Принимаешь ли ты сейчас препараты, влияющие на психику, без наблюдения врача?",
+    options: [
+      { text: "Да, я вынужден(а) справляться сам(а)", next: "STOP_SAFETY" },
+      { text: "Бывало, пробовал(а), но сейчас нет", next: "S4" },
+      { text: "Нет, я не принимаю", next: "S4" }
+    ]
+  },
+  S4: {
+    text: "Кажется ли тебе иногда, что тревога может толкнуть тебя на опасные для тебя или окружающих действия?",
+    options: [
+      { text: "Да, это пугает меня", next: "STOP_SAFETY" },
+      { text: "Иногда я чувствую, что на грани, но держусь", next: "Q0" },
+      { text: "Нет, я контролирую свои действия", next: "Q0" }
+    ]
+  },
+  Q0: {
+    text: "Что для тебя самое невыносимое, когда тревога накрывает?",
+    options: [
+      { text: "Ощущение, что всё выходит из-под контроля", next: "A1" },
+      { text: "Неизвестность: я не знаю, чем всё закончится", next: "B1" },
+      { text: "Чувство, что я подвожу других или себя", next: "C1" },
+      { text: "Физический дискомфорт: сердце колотится, трудно дышать", next: "D1" }
+    ]
+  },
+  // Ветка А (контроль)
+  A1: {
+    text: "Когда чувствуешь, что контроль ускользает, что делаешь в первую секунду?",
+    options: [
+      { text: "Пытаюсь составить план, список, структурировать", next: "A2" },
+      { text: "Замираю, впадаю в ступор", next: "A5" },
+      { text: "Во мне поднимается злость", next: "A9" }
+    ]
+  },
+  A2: {
+    text: "Твои планы и списки обычно приносят облегчение?",
+    options: [
+      { text: "Да, на время", next: "A3" },
+      { text: "Нет, только изматывают", next: "A4" }
+    ]
+  },
+  A3: { text: "Когда план сработал и тревога отступила, что чувствуешь?",
+    options: [
+      { text: "Облегчение, но сразу страх следующей атаки", next: "RES_A3_1" },
+      { text: "Не успеваю выдохнуть, ищу новый контроль", next: "RES_A3_2" }
+    ]
+  },
+  A4: { text: "Почему продолжаешь планировать, хотя это изматывает?",
+    options: [
+      { text: "Привычка, без этого ещё хуже", next: "RES_A4_1" },
+      { text: "Кажется, что если перестану, случится катастрофа", next: "RES_A4_2" }
+    ]
+  },
+  A5: { text: "На что похоже оцепенение?",
+    options: [
+      { text: "На усталость", next: "A6" },
+      { text: "На страх сделать неверный шаг", next: "A7" }
+    ]
+  },
+  A6: { text: "Что истощает сильнее всего?",
+    options: [
+      { text: "Постоянное напряжение", next: "RES_A6_1" },
+      { text: "Невозможность расслабиться даже во сне", next: "RES_A6_2" }
+    ]
+  },
+  A7: { text: "Что случится, если ошибиться?",
+    options: [
+      { text: "Потеряю уважение", next: "RES_A7_1" },
+      { text: "Всё разрушится", next: "RES_A7_2" }
+    ]
+  },
+  A9: { text: "На кого направлена злость?",
+    options: [
+      { text: "На себя", next: "RES_A9_1" },
+      { text: "На ситуацию", next: "RES_A9_2" }
+    ]
+  },
+  // Ветка Б (неизвестность)
+  B1: { text: "Когда сталкиваешься с неопределённостью, что делаешь?",
+    options: [
+      { text: "Прокручиваю плохие сценарии", next: "B2" },
+      { text: "Ищу информацию", next: "B3" },
+      { text: "Замираю и жду", next: "B4" }
+    ]
+  },
+  B2: { text: "Прокручивание сценариев помогает?",
+    options: [
+      { text: "Да, даёт иллюзию контроля", next: "RES_B2_1" },
+      { text: "Нет, только истощает", next: "RES_B2_2" }
+    ]
+  },
+  B3: { text: "Когда ищешь информацию, что происходит?",
+    options: [
+      { text: "Успокаиваюсь, если нахожу ответ", next: "RES_B3_1" },
+      { text: "Тревога усиливается", next: "RES_B3_2" }
+    ]
+  },
+  B4: { text: "Ожидание похоже на...",
+    options: [
+      { text: "Затишье перед бурей", next: "RES_B4_1" },
+      { text: "Надежду, что всё разрешится", next: "RES_B4_2" }
+    ]
+  },
+  // Ветка В (вина)
+  C1: { text: "Чьё разочарование страшнее всего?",
+    options: [
+      { text: "Своё собственное", next: "C2" },
+      { text: "Близких", next: "C3" }
+    ]
+  },
+  C2: { text: "Что говоришь себе, когда кажется, что не справляешься?",
+    options: [
+      { text: "«Ты обязан(а) быть лучше»", next: "RES_C2_1" },
+      { text: "«Ты ничтожество»", next: "RES_C2_2" }
+    ]
+  },
+  C3: { text: "Что случится, если подведёшь близких?",
+    options: [
+      { text: "Они отвернутся", next: "RES_C3_1" },
+      { text: "Они будут страдать, и это моя вина", next: "RES_C3_2" }
+    ]
+  },
+  // Ветка Г (тело)
+  D1: { text: "Что ощущаешь в первую очередь?",
+    options: [
+      { text: "Сердце: колотится, давит", next: "D2" },
+      { text: "Дыхание: перехватывает", next: "D3" }
+    ]
+  },
+  D2: { text: "Что пугает больше?",
+    options: [
+      { text: "Мысли о болезни", next: "RES_D2_1" },
+      { text: "Сами ощущения", next: "RES_D2_2" }
+    ]
+  },
+  D3: { text: "На что похоже затруднённое дыхание?",
+    options: [
+      { text: "Тяжесть на груди", next: "RES_D3_1" },
+      { text: "Как будто дышу через соломинку", next: "RES_D3_2" }
+    ]
+  }
+};
+
+// Тексты заключений для всех конечных узлов
+const results = {
+  STOP_SAFETY: `Пожалуйста, обратись за профессиональной помощью. Твои переживания очень серьёзны и заслуживают бережного сопровождения.
+
+📞 Бесплатная горячая линия психологической помощи (Россия): 8-800-2000-122
+Не оставайся с этим один.`,
+
+  RES_A3_1: {
+    title: "Контроль как временное убежище",
+    portrait: "Ты — человек, который научился справляться с хаосом, планируя. Но спокойствие длится лишь миг, и снова нужно бежать. Твоя тревога — это сторож, который никогда не спит.",
+    state: "Ты живёшь в цикле «план — облегчение — новая тревога». Это изматывает и не даёт по-настоящему расслабиться.",
+    recommendation: "Попробуй в следующий раз, когда тревога отступит, не искать сразу новую задачу. Просто побудь с тишиной 5 минут. Скажи себе: «Я имею право на паузу». Это не лень, это забота о себе."
+  },
+  RES_A3_2: {
+    title: "Гонка без финиша",
+    portrait: "Ты не даёшь себе ни секунды покоя. Даже когда тревога уходит, ты уже высматриваешь следующую угрозу.",
+    state: "Твоя нервная система работает на пределе. Ты давно забыл(а), каково это — просто быть, а не делать.",
+    recommendation: "Позволь себе остановиться хотя бы на минуту. Закрой глаза и представь, что ты — спокойное озеро. Мысли — это рябь на воде. Не нужно их убирать, просто наблюдай."
+  },
+  RES_A4_1: {
+    title: "Привычка держать всё",
+    portrait: "Планирование стало твоей второй натурой, но оно уже не помогает, а только забирает силы.",
+    state: "Ты на автомате продолжаешь составлять списки, хотя интуиция подсказывает — хватит.",
+    recommendation: "Сегодня попробуй сделать что-то без плана. Например, выбери фильм не по рейтингу, а по обложке. Дай себе право на спонтанность."
+  },
+  RES_A4_2: {
+    title: "Страх катастрофы",
+    portrait: "В глубине души ты веришь, что стоит отпустить контроль — случится непоправимое. Это убеждение родом из прошлого.",
+    state: "Ты живёшь с ощущением, что держишь небо на плечах.",
+    recommendation: "Попробуй представить, что ты передаёшь часть своего контроля кому-то надёжному. Или просто скажи вслух: «Я не обязан(а) всё держать». Это первый шаг к свободе."
+  },
+  RES_A6_1: {
+    title: "Истощение от постоянного напряжения",
+    portrait: "Ты очень выносливый человек, но даже самый прочный канат когда-то перетирается. Твоя усталость — не слабость, а сигнал.",
+    state: "Ты постоянно напряжён(а), и это отнимает энергию, которую можно было бы потратить на радость.",
+    recommendation: "Попробуй технику «прогрессивной мышечной релаксации»: поочерёдно напрягай и расслабляй группы мышц от пальцев ног до лица. Это помогает вернуть контакт с телом."
+  },
+  RES_A6_2: {
+    title: "Сон без отдыха",
+    portrait: "Твоя тревога проникла даже в сон. Ты ложишься уставшим(ей) и просыпаешься без сил.",
+    state: "Сон перестал быть убежищем, потому что подсознание продолжает борьбу.",
+    recommendation: "Перед сном записывай все тревожные мысли на бумагу. Скажи себе: «Я посмотрю на это завтра». Дай разрешение отложить проблемы хотя бы до утра."
+  },
+  RES_A7_1: {
+    title: "Страх потерять лицо",
+    portrait: "Ты боишься ошибиться, потому что ошибка для тебя равна потере уважения. Но уважение начинается с собственного принятия.",
+    state: "Ты тратишь колоссальную энергию на поддержание образа «идеального человека».",
+    recommendation: "Разреши себе быть несовершенным. Напомни себе: «Я ценен(на) не за безошибочность, а за то, что я есть»."
+  },
+  RES_A7_2: {
+    title: "Мир рухнет от одной ошибки",
+    portrait: "Ты наделил(а) ошибки разрушительной силой. Но правда в том, что жизнь состоит из проб и ошибок.",
+    state: "Ты парализован(а) страхом последствий, который преувеличен тревогой.",
+    recommendation: "Представь худший сценарий и спроси себя: «Это действительно конец света?». Чаще всего ответ — нет. Ты справишься, даже если что-то пойдёт не по плану."
+  },
+  RES_A9_1: {
+    title: "Злость на себя",
+    portrait: "Твой внутренний критик очень громкий. Но злость — это энергия, которую можно перенаправить в заботу.",
+    state: "Ты тратишь силы на самобичевание, вместо того чтобы поддержать себя.",
+    recommendation: "Когда снова начнёшь ругать себя, остановись и спроси: «Что бы я сказал(а) другу в такой ситуации?». Скажи эти слова себе."
+  },
+  RES_A9_2: {
+    title: "Злость на мир",
+    portrait: "Ты чувствуешь, что жизнь несправедлива. Это understandable, но гнев часто только усиливает тревогу.",
+    state: "Ты застрял(а) в ощущении, что всё против тебя.",
+    recommendation: "Попробуй выразить злость безопасно: напиши гневное письмо и порви его, побей подушку, прокричись в лесу. Это снимет напряжение и даст ясность."
+  },
+  RES_B2_1: {
+    title: "Иллюзия контроля через страх",
+    portrait: "Ты пытаешься подготовиться к худшему, чтобы оно не застало врасплох. Это твоя стратегия выживания.",
+    state: "Постоянное прокручивание негативных сценариев создаёт иллюзию контроля, но в реальности истощает.",
+    recommendation: "Выдели специальное время для тревоги — 15 минут в день. Всё остальное время напоминай себе: «У меня будет время подумать об этом позже»."
+  },
+  RES_B2_2: {
+    title: "Истощение от мыслей",
+    portrait: "Ты устал(а) от бесконечного мысленного шума. Твой мозг заслуживает отдыха.",
+    state: "Ты осознаёшь, что сценарии не помогают, но пока не знаешь, как остановиться.",
+    recommendation: "Попробуй технику «остановки мысли»: как только ловишь себя на прокручивании, громко скажи «СТОП!» и переключись на дыхание или посчитай предметы вокруг."
+  },
+  RES_B3_1: {
+    title: "Поиск ясности",
+    portrait: "Ты ищешь ответы, чтобы успокоиться, и это работает — но ненадолго.",
+    state: "Ты зависим(а) от информации как от временного успокоительного.",
+    recommendation: "Когда найдёшь ответ, дай себе время насладиться спокойствием, прежде чем искать новый вопрос. Запиши, что ты узнал(а), и закрой тему."
+  },
+  RES_B3_2: {
+    title: "Информация усиливает шторм",
+    portrait: "Чем больше ты узнаёшь, тем страшнее становится. Это замкнутый круг.",
+    state: "Ты попал(а) в ловушку гиперосведомлённости.",
+    recommendation: "Устрой информационный детокс: выключи уведомления, не читай новости хотя бы сутки. Ты увидишь, что мир не рухнет без твоего контроля."
+  },
+  RES_B4_1: {
+    title: "Затишье перед бурей",
+    portrait: "Ты живёшь в ожидании, что спокойствие вот-вот разрушится. Это ожидание само становится тревогой.",
+    state: "Ты не можешь насладиться моментом, потому что ждёшь подвоха.",
+    recommendation: "Попробуй сказать себе: «Прямо сейчас я в безопасности. Ничего плохого не происходит». Возвращайся в настоящий момент."
+  },
+  RES_B4_2: {
+    title: "Надежда как спасательный круг",
+    portrait: "Ты надеешься, что всё разрешится само, и это даёт тебе силы. Но важно и самому(ой) делать маленькие шаги.",
+    state: "Ты сохраняешь оптимизм, что помогает держаться на плаву.",
+    recommendation: "Сочетай надежду с действием: составь список того, что ты реально можешь сделать сегодня, чтобы приблизить желаемое."
+  },
+  RES_C2_1: {
+    title: "Долг быть лучше",
+    portrait: "Ты вырос(ла) с убеждением, что любовь нужно заслужить. Теперь ты сам(а) себе самый строгий судья.",
+    state: "Ты постоянно предъявляешь к себе завышенные требования, и это лишает сил.",
+    recommendation: "Каждый день находи одну вещь, за которую можешь себя похвалить просто так, без условий. «Я молодец, что встал(а) утром». Закрепляй право на безусловную ценность."
+  },
+  RES_C2_2: {
+    title: "Внутренний критик",
+    portrait: "Твой внутренний голос жёсток. Но он не говорит правду — он повторяет старые раны.",
+    state: "Ты веришь в свою никчёмность, и это блокирует любые попытки увидеть себя настоящего(ую).",
+    recommendation: "Начни отслеживать самокритику и спрашивать: «Чей это голос на самом деле?». Постепенно замени его на поддерживающий."
+  },
+  RES_C3_1: {
+    title: "Страх отвержения",
+    portrait: "Ты боишься потерять близких, и это делает тебя уязвимым(ой).",
+    state: "Ты строишь отношения на страхе, а не на доверии.",
+    recommendation: "Попробуй честно поговорить с близкими о своих страхах. Часто оказывается, что они и не думали отвергать тебя."
+  },
+  RES_C3_2: {
+    title: "Ответственность за чувства других",
+    portrait: "Ты взял(а) на себя ношу отвечать за счастье окружающих. Это слишком тяжело.",
+    state: "Ты чувствуешь вину за то, что не можешь сделать всех счастливыми.",
+    recommendation: "Помни: ты не обязан(а) нести ответственность за эмоции других людей. Ты можешь поддерживать, но не проживать за них."
+  },
+  RES_D2_1: {
+    title: "Страх за здоровье",
+    portrait: "Твоё тело подаёт сигналы, и ты внимательно к ним прислушиваешься. Но тревога усиливает ощущения.",
+    state: "Ты попал(а) в цикл «симптом → страх → новый симптом».",
+    recommendation: "Сходи к врачу, чтобы исключить реальные проблемы. Затем, когда врач подтвердит, что ты здоров(а), напоминай себе об этом в моменты паники."
+  },
+  RES_D2_2: {
+    title: "Страх телесных ощущений",
+    portrait: "Ты боишься самих ощущений, потому что они кажутся неконтролируемыми.",
+    state: "Ты пытаешься подавить телесные реакции, но это только усиливает их.",
+    recommendation: "Попробуй технику «заземления»: найди 5 предметов, которые видишь, 4 — которые можешь потрогать, 3 — услышать, 2 — понюхать, 1 — попробовать на вкус. Это возвращает в реальность."
+  },
+  RES_D3_1: {
+    title: "Тяжесть на душе",
+    portrait: "Твоя тревога буквально давит на грудь. Ты не один(на) — это одно из самых частых проявлений.",
+    state: "Дыхание поверхностное, тело напряжено.",
+    recommendation: "Практикуй дыхание по квадрату: вдох 4 секунды, задержка 4, выдох 4, задержка 4. Повтори 5 раз. Это мягко успокаивает нервную систему."
+  },
+  RES_D3_2: {
+    title: "Не хватает воздуха",
+    portrait: "Ощущение нехватки воздуха очень пугает, но оно вызвано именно тревогой, а не проблемами с лёгкими.",
+    state: "Ты дышишь часто и поверхностно, что приводит к гипервентиляции.",
+    recommendation: "Когда почувствуешь нехватку воздуха, попробуй дышать в сложенные ладони или бумажный пакет. Это восстановит баланс углекислого газа и уменьшит панику."
+  }
+};
+
+// Логика приложения
+let currentQuestionId = 'S1';
+let stepCount = 0;
+const MAX_STEPS = 10; // примерное число шагов для прогресса
+
+function renderTopics() {
+  const grid = document.getElementById('topics-grid');
+  grid.innerHTML = '';
+  topics.forEach(topic => {
+    const card = document.createElement('div');
+    card.className = 'card' + (topic.active ? '' : ' disabled');
+    card.textContent = topic.name;
+    if (topic.active) {
+      card.addEventListener('click', () => {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('test-screen').classList.remove('hidden');
+        stepCount = 0;
+        updateProgress();
+        showQuestion('S1');
+      });
+    }
+    grid.appendChild(card);
+  });
+}
+
+function updateProgress() {
+  const percent = Math.min(100, (stepCount / MAX_STEPS) * 100);
+  document.getElementById('progress-fill').style.width = percent + '%';
+}
+
+function showQuestion(id) {
+  currentQuestionId = id;
+  const q = questions[id];
+  if (!q) {
+    showResult(id);
+    return;
+  }
+  document.getElementById('question-text').textContent = q.text;
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => handleAnswer(opt.next));
+    container.appendChild(btn);
+  });
+}
+
+function handleAnswer(nextId) {
+  stepCount++;
+  updateProgress();
+  if (nextId === 'STOP_SAFETY') {
+    showResult('STOP_SAFETY');
+  } else if (nextId.startsWith('RES_')) {
+    showResult(nextId);
+  } else {
+    showQuestion(nextId);
+  }
+}
+
+function showResult(resultId) {
+  document.getElementById('test-screen').classList.add('hidden');
+  document.getElementById('result-screen').classList.remove('hidden');
+  document.getElementById('progress-fill').style.width = '100%';
+  const content = document.getElementById('result-content');
+  if (resultId === 'STOP_SAFETY') {
+    content.textContent = results.STOP_SAFETY;
+    return;
+  }
+  const data = results[resultId];
+  if (!data) {
+    content.textContent = 'Твоя история уникальна. Мы готовим для тебя персонализированное заключение.';
+    return;
+  }
+  const resultText = `🌱 ${data.title}
+
+🧠 Психологический портрет
+${data.portrait}
+
+📊 Анализ текущего состояния
+${data.state}
+
+💌 Рекомендации
+${data.recommendation}
+
+Помни: ты не один(на). Береги себя.`;
+  content.textContent = resultText;
+}
+
+// Запуск
+renderTopics();
+</script>
+</body>
+</html>
